@@ -15,37 +15,13 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
 
     console.log('Successfully connected to mongodb')
     const db = client.db(dbName)
-    //     db.collection('users').insertMany([{
-    //         name : 'Katta',
-    //         age  :23
-    //     },
-    //     {
-    //         name : 'Chandan',
-    //         age  :23
-    //     }], (error, result) => {
-    //         if(error){
-    //             return console.log(error)
-    //         }
-    //         console.log(result.ops)
-    //     })
-
-    // db.collection('tasks').insertMany([
-    //     {
-    //         description: 'Mongodb course',
-    //         completed: false
-    //     },
-    //     {
-    //         description: 'Read for half an hour',
-    //         completed: false
-    //     },
-    //     {
-    //         description: 'Watch a podcast',
-    //         completed: false
-    //     }], (error, result) => {
-    //         if (error) {
-    //             return console.log('Unable to insert into the collection')
-    //         }
-    //         console.log('Successfully added tasks to the tasks collection \n', result.ops)
-    //     })
+    db.collection('users').findOne({
+        _id :  new ObjectID("5f1136bcf6e6ad0628645410")
+    }, (error, result) => {
+        if(error){
+            return console.log('Unable to fetch the data')
+        }
+        console.log(result)
+    })
 })
 
