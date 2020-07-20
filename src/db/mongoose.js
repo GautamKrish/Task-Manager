@@ -41,7 +41,7 @@ const User = mongoose.model('User',{
             if(password.length < 6){
                 throw new Error('Password should have atleast 6 charcaters')
             }
-            if(password.includes('password')){
+            if(password.toLowerCase().includes('password')){
                 throw new Error('Password cannot contain "password" ')
             }
 
@@ -49,38 +49,40 @@ const User = mongoose.model('User',{
     }
 })
 
-const me = new User({
-    name : 'laharika',
-    age : 23,
-    email : 'laharika@gmail.com',
-    password : 4523456789
-})
-
-me.save()
-.then(() =>{
-    console.log( me )
-})
-.catch((error) => {
-    console.log(`Error : - ${error}`)
-})
-
-// const Tasks = mongoose.model('Tasks', {
-//     description :  {
-//         type : String
-//     },
-//     completed : {
-//         type : Boolean
-//     }
+// const me = new User({
+//     name : 'laharika',
+//     age : 23,
+//     email : 'laharika@gmail.com',
+//     password : 4523456789
 // })
 
-// const task = new Tasks({
-//     description : 'node.js course',
-//     completed : false
+// me.save()
+// .then(() =>{
+//     console.log( me )
+// })
+// .catch((error) => {
+//     console.log(`Error : - ${error}`)
 // })
 
-// task.save()
-// .then(() => {
-//     console.log(task)
-// }).catch((error) => {
-//     console.log(error)
-// })
+const Tasks = mongoose.model('Tasks', {
+    description :  {
+        type : String,
+        trim  :true,
+        required : true
+    },
+    completed : {
+        type : Boolean,
+        default : false
+    }
+})
+
+const task = new Tasks({
+    description : '     exploring validation and sanitization in mongoose    ',
+})
+
+task.save()
+.then(() => {
+    console.log(task)
+}).catch((error) => {
+    console.log(error)
+})
