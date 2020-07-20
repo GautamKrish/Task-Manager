@@ -32,13 +32,28 @@ const User = mongoose.model('User',{
                 throw new Error('Invalid email')
             }
         }
+    },
+    password : {
+        type : String,
+        required : true,
+        trim  : true,
+        validate(password) {
+            if(password.length < 6){
+                throw new Error('Password should have atleast 6 charcaters')
+            }
+            if(password.includes('password')){
+                throw new Error('Password cannot contain "password" ')
+            }
+
+        }
     }
 })
 
 const me = new User({
-    name : 'Shreyasi',
+    name : 'laharika',
     age : 23,
-    email : 'shreyasi@gmail.com'
+    email : 'laharika@gmail.com',
+    password : 4523456789
 })
 
 me.save()
