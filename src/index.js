@@ -83,12 +83,12 @@ app.patch('/users/:id', async (req, res) => {
     const allowedToUpdate = ['name', 'age', 'email', 'password']
     const isUpdateAllowed = fieldsToUpdate.every(key => allowedToUpdate.includes(key))
 
-    if (fieldsToUpdate.length ==0 || !isUpdateAllowed) {
+    if (fieldsToUpdate.length == 0 || !isUpdateAllowed) {
         return res.status(400).send({
             error: 'Please check the fields to update'
         })
     }
-    try{
+    try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
         if (!user) {
             return res.status(404).send({
@@ -96,7 +96,32 @@ app.patch('/users/:id', async (req, res) => {
             })
         }
         res.send(user)
-    }catch (error) {
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
+
+
+app.patch('/tasks/:id', async (req, res) => {
+    const fieldsToUpdate = Object.keys(req.body)
+    const allowedToUpdate = ['completed', 'description']
+    const isUpdateAllowed = fieldsToUpdate.every(key => allowedToUpdate.includes(key))
+
+    if (fieldsToUpdate.length == 0 || !isUpdateAllowed) {
+        return res.status(400).send({
+            error: 'Please check the fields to update'
+        })
+    }
+
+    try {
+        const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+        if (!task) {
+            return res.status(400).send({
+                error: `No task by the id ${req.params.id} found`
+            })
+        }
+        res.send(task)
+    } catch (error) {
         res.status(500).send(error)
     }
 })
