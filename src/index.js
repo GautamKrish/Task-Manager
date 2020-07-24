@@ -78,6 +78,30 @@ app.get('/tasks/:id', async (req, res) => {
 })
 
 
+app.patch('/users/:id', async (req, res) => {
+    const fieldsToUpdate = Object.keys(req.body)
+    const allowedToUpdate = ['name', 'age', 'email', 'password']
+    const isUpdateAllowed = fieldsToUpdate.every(key => allowedToUpdate.includes(key))
+
+    if (fieldsToUpdate.length ==0 || !isUpdateAllowed) {
+        return res.status(400).send({
+            error: 'Please check the fields to update'
+        })
+    }
+    try{
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+        if (!user) {
+            return res.status(404).send({
+                error: `No user by the id ${req.params.id} found.`
+            })
+        }
+        res.send(user)
+    }catch (error) {
+        res.status(500).send(error)
+    }
+})
+
+
 app.listen(port, () => {
     console.log(`Server listening on ${port}`)
 })
