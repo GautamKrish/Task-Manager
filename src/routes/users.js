@@ -50,7 +50,7 @@ router.patch('/users/:id', async (req, res) => {
     try {
         let user = await User.findById(req.params.id)
         fieldsToUpdate.forEach(update => user[update] = req.body[update])
-        await user.save({validateBeforeSave : false})    
+        user = await user.save({validateBeforeSave : false})    
         if (!user) {
             return res.status(404).send({
                 error: `No user by the id ${req.params.id} found.`
