@@ -142,6 +142,20 @@ app.delete('/users/:id', async (req, res) => {
     }
 })
 
+app.delete('/tasks/:id', async (req, res) => {
+    try{
+        const task = await Task.findByIdAndDelete(req.params.id)
+        if(!task){
+            res.status(404).send({
+                error : `No task by the id ${req.params.id} found`
+            })
+        }
+        res.send(task)
+    }catch(error){
+        res.status(500).send(error)
+    }
+})
+
 
 app.listen(port, () => {
     console.log(`Server listening on ${port}`)
