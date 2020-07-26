@@ -1,6 +1,6 @@
 const express = require('express')
 require('./db/mongoose')
-
+const jwt = require('jsonwebtoken')
 
 
 const app = express()
@@ -17,11 +17,13 @@ app.listen(port, () => {
     console.log(`Server listening on ${port}`)
 })
 
-// const hashPassword = async(text) =>{
-//     const hashedPassword = await bcrypt.hash(text, 8)
-//     console.log(`Plain password :- ${text}`)
-//     console.log(`Hashed Password :- ${hashedPassword}`)
-//     console.log(await bcrypt.compare(text, hashedPassword))
-// }
+const authentication = async() => {
+    const token = await jwt.sign({_id : 'ROKTKG1KOR'}, 'thisismyboschntid', {expiresIn : "1 day"})
+    console.log(`token is ${token}`)
+    const verification = await jwt.verify(token, 'thisismyboschntid')
+    return verification
+}
 
-// hashPassword('KvVg*&9987')
+authentication()
+.then(verification => console.log(verification))
+.catch(error => console.log(error))
