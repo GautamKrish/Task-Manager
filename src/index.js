@@ -2,6 +2,7 @@ const express = require('express')
 require('./db/mongoose')
 const User = require('./models/user')
 const Task = require('./models/task')
+const { findByIdAndDelete } = require('./models/user')
 
 
 const app = express()
@@ -123,6 +124,21 @@ app.patch('/tasks/:id', async (req, res) => {
         res.send(task)
     } catch (error) {
         res.status(500).send(error)
+    }
+})
+
+
+app.delete('/users/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id)
+        if(!user){
+            return res.status(404).send({
+                error  : `No user by the id ${req.params.id} found`
+            })
+        }
+        res.send(user)
+    }catch(error){
+        res.status(500).send()
     }
 })
 
