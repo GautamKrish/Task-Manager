@@ -3,6 +3,7 @@ const router = new express.Router()
 const User = require('../models/user')
 
 
+
 router.post('/users', async (req, res) => {
     try {
         const user = await new User(req.body).save()
@@ -36,7 +37,6 @@ router.get('/users/:id', async (req, res) => {
     }
 })
 
-
 router.patch('/users/:id', async (req, res) => {
     const fieldsToUpdate = Object.keys(req.body)
     const allowedToUpdate = ['name', 'age', 'email', 'password']
@@ -48,7 +48,9 @@ router.patch('/users/:id', async (req, res) => {
         })
     }
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+        let user = await User.findById(req.params.id)
+        fieldsToUpdate.forEach(update => user[update] = req.body[update])
+        await user.save({validateBeforeSave : false})    
         if (!user) {
             return res.status(404).send({
                 error: `No user by the id ${req.params.id} found.`
