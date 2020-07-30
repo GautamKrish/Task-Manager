@@ -16,14 +16,3 @@ app.use(tasksRouter)
 app.listen(port, () => {
     console.log(`Server listening on ${port}`)
 })
-
-const authentication = async() => {
-    const token = await jwt.sign({_id : 'ROKTKG1KOR'}, 'thisismyboschntid', {expiresIn : "1 day"})
-    console.log(`token is ${token}`)
-    const verification = await jwt.verify(token, 'thisismyboschntid')
-    return verification
-}
-
-authentication()
-.then(verification => console.log(verification))
-.catch(error => console.log(error))

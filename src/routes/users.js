@@ -7,7 +7,8 @@ const User = require('../models/user')
 router.post('/users', async (req, res) => {
     try {
         const user = await new User(req.body).save()
-        res.status(201).send(user)
+        const token = await user.generateToken()
+        res.send({ user, token })
     }
     catch (error) {
         res.status(500).send(error)
@@ -18,9 +19,10 @@ router.post('/users', async (req, res) => {
 router.post('/users/login', async (req, res) => {
     try{
     const user = await User.findByCredentials(req.body.email, req.body.password)
-    res.send(`${user.name} successfully logged in`)
+    const token  = await user.generateToken()
+    res.send({ user, token})
     } catch(error){
-        res.status(500).send()
+        res.status(500).send(error)
     }
 })
 
@@ -59,7 +61,7 @@ router.patch('/users/:id', async (req, res) => {
     try {
         let user = await User.findById(req.params.id)
         fieldsToUpdate.forEach(update => user[update] = req.body[update])
-        user = await user.save({validateBeforeSave : false})    
+        user = await user.save()    
         if (!user) {
             return res.status(404).send({
                 error: `No user by the id ${req.params.id} found.`
