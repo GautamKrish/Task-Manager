@@ -7,10 +7,11 @@ const app = express()
 const port = process.env.PORT || 3000
 
 app.use((req, res, next) => {
-    console.log('Inside middleware')
     if(req.method === 'GET') return res.status(500).send('GET requests are disabled')
     next()
 })
+
+app.use((req, res, next) => res.status(503).send('Server is currently under maintenance'))
 app.use(express.json())
 
 
