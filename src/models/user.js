@@ -70,7 +70,6 @@ userSchema.statics.findByCredentials = async (email, password) => {
     if (!isValidPassword) {
         throw new Error('Unable to login')
     }
-
     return user
 }
 
