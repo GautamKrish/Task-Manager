@@ -42,7 +42,7 @@ router.get('/tasks/:id', auth, async (req, res) => {
     }
 })
 
-router.patch('/tasks/:id', async (req, res) => {
+router.patch('/tasks/:id', auth, async (req, res) => {
     const fieldsToUpdate = Object.keys(req.body)
     const allowedToUpdate = ['completed', 'description']
     const isUpdateAllowed = fieldsToUpdate.every(key => allowedToUpdate.includes(key))
@@ -54,14 +54,14 @@ router.patch('/tasks/:id', async (req, res) => {
     }
 
     try {
-        let task = await Task.findById(req.params.id)
-        fieldsToUpdate.forEach(update => task[update] = req.body[update])
-        task = await task.save()
+        let task = await Task.findOne({_id : req.params.id, owner : req.user._id})
         if (!task) {
             return res.status(400).send({
                 error: `No task by the id ${req.params.id} found`
             })
         }
+        fieldsToUpdate.forEach(update => task[update] = req.body[update])
+        task = await task.save()
         res.send(task)
     } catch (error) {
         res.status(500).send(error)
