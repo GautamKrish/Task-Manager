@@ -2,17 +2,17 @@ const express = require('express')
 require('./db/mongoose')
 const Task = require('./models/task')
 const User = require('./models/user')
+const multer = require('multer')
+
+const upload = multer({
+    dest : 'images'
+})
 
 
 const app = express()
 const port = process.env.PORT || 3000
 
-// app.use((req, res, next) => {
-//     if(req.method === 'GET') return res.status(500).send('GET requests are disabled')
-//     next()
-// })
 
-// app.use((req, res, next) => res.status(503).send('Server is currently under maintenance'))
 app.use(express.json())
 const usersRouter = require('./routes/users')
 const tasksRouter = require('./routes/tasks')
@@ -21,4 +21,9 @@ app.use(tasksRouter)
 
 app.listen(port, () => {
     console.log(`Server listening on ${port}`)
+})
+
+
+app.post('/upload', upload.single('upload'), (req, res) => {
+    res.send()
 })
