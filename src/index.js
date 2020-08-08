@@ -5,7 +5,16 @@ const User = require('./models/user')
 const multer = require('multer')
 
 const upload = multer({
-    dest : 'images'
+    dest : 'images',
+    limits : {
+        fileSize : 1000000
+    },
+    fileFilter(req, file, cb){
+        if(!file.originalname.match(/\.(doc|docx)$/)){
+            cb(new Error('Please upload a word document'))
+        }
+        cb(undefined, true)
+    }
 })
 
 
