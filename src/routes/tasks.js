@@ -16,15 +16,22 @@ router.post('/tasks', auth, async (req, res) => {
     }
 
 })
-
+//GET '/tasks?completed=true'
+//GET '/tasks?limit=3&skip=2'
+//GET '/tasks?sortBy=createdAt:asc
 router.get('/tasks', auth, async (req, res) => {
-    let match = {}
+    let match = {}, sort = {}
     if(req.query.completed){
         match.completed = req.query.completed === 'true'
     }
+    if(req.query.sortBy){
+        const parameters = req.query.sortBy.split(':')
+        sort[parameters[0]] = parameters[1] === 'asc' ? 1 : -1
+    }
     let options = {
         limit : parseInt(req.query.limit),
-        skip : parseInt(req.query.skip) 
+        skip : parseInt(req.query.skip),
+        sort
     }
     try {
         const user = req.user   
