@@ -32,7 +32,11 @@ app.listen(port, () => {
     console.log(`Server listening on ${port}`)
 })
 
-
-app.post('/upload', upload.single('upload'), (req, res) => {
+const middlewareError = (req, res, next) => {
+    throw new Error('Middleware Error')
+}
+app.post('/upload', middlewareError, (req, res) => {
     res.send()
+}, (error, req, res, next) => {
+    res.status(500).send(error.message)
 })
