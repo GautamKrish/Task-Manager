@@ -3,6 +3,7 @@ const User = require('../models/user')
 const auth = async(req, res, next) => {
     try{
         const token = req.header('Authorization').replace('Bearer ', '')
+        console.log(req.header('Authorization'))
         const decoded = jwt.verify(token, 'thisisfortokengeneration')
         // console.log({ token, decoded })
         // let date = new Date(decoded.iat)
